@@ -69,7 +69,7 @@ const Dashboard = () => {
     { key: 'branches', label: 'Branches' }
   ];
 
-  const handleROClick = (row: any) => {
+  const handleROClick = (row) => {
     navigate(`/dashboard/ro-details/${encodeURIComponent(row.roName)}`);
   };
 

@@ -2,28 +2,28 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Building2, TrendingUp, Users } from "lucide-react";
+import { ArrowLeft, Users, TrendingUp, CreditCard } from "lucide-react";
 import DataTable from "@/components/tables/DataTable";
 import ROChart from "@/components/charts/ROChart";
-import { branchDataByRO } from "@/data/mockData";
+import { cspDataByBranch } from "@/data/mockData";
 
-const RODetails = () => {
-  const { roName } = useParams<{ roName: string }>();
+const BranchDetails = () => {
+  const { branchName } = useParams();
   const navigate = useNavigate();
   
-  const decodedROName = decodeURIComponent(roName || "");
-  const branchData = branchDataByRO[decodedROName] || [];
+  const decodedBranchName = decodeURIComponent(branchName || "");
+  const cspData = cspDataByBranch[decodedBranchName] || [];
 
-  // Calculate totals for this RO
-  const totalTransactions = branchData.reduce((sum, branch) => sum + branch.totalTxnCount, 0);
-  const totalBranches = branchData.length;
-  const avgTransactionsPerBranch = totalBranches > 0 ? Math.round(totalTransactions / totalBranches) : 0;
+  // Calculate totals for this branch
+  const totalTransactions = cspData.reduce((sum, csp) => sum + csp.totalTxnCount, 0);
+  const totalCSPs = cspData.length;
+  const avgTransactionsPerCSP = totalCSPs > 0 ? Math.round(totalTransactions / totalCSPs) : 0;
 
   const overviewCards = [
     {
-      title: "Total Branches",
-      value: totalBranches.toString(),
-      icon: Building2,
+      title: "Total CSPs",
+      value: totalCSPs.toString(),
+      icon: Users,
       color: "text-blue-600",
       bgColor: "bg-blue-50"
     },
@@ -35,9 +35,9 @@ const RODetails = () => {
       bgColor: "bg-green-50"
     },
     {
-      title: "Avg. per Branch",
-      value: avgTransactionsPerBranch.toLocaleString(),
-      icon: Users,
+      title: "Avg. per CSP",
+      value: avgTransactionsPerCSP.toLocaleString(),
+      icon: CreditCard,
       color: "text-purple-600",
       bgColor: "bg-purple-50"
     }
@@ -45,7 +45,7 @@ const RODetails = () => {
 
   const tableColumns = [
     { key: 'sno', label: 'S.No.', width: '60px' },
-    { key: 'branchName', label: 'Branch Name', width: '200px' },
+    { key: 'cspName', label: 'CSP ID/Name', width: '250px' },
     { key: 'onusTxnCount', label: 'ONUS TXN Count' },
     { key: 'offusTxnCount', label: 'OFFUS TXN Count' },
     { key: 'fiTxnCount', label: 'FI TXN Count' },
@@ -54,11 +54,11 @@ const RODetails = () => {
     { key: 'bankTotalCount', label: 'Bank Total Count' }
   ];
 
-  const handleBranchClick = (row: any) => {
-    navigate(`/dashboard/branch-details/${encodeURIComponent(row.branchName)}`);
+  const handleCSPClick = (row) => {
+    navigate(`/dashboard/csp-details/${encodeURIComponent(row.cspName)}`);
   };
 
-  if (branchData.length === 0) {
+  if (cspData.length === 0) {
     return (
       <div className="space-y-6 p-6">
         <div className="flex items-center space-x-4">
@@ -67,21 +67,21 @@ const RODetails = () => {
             Back
           </Button>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">{decodedROName}</h1>
-            <p className="text-muted-foreground">Regional Office Details</p>
+            <h1 className="text-3xl font-bold text-foreground">{decodedBranchName}</h1>
+            <p className="text-muted-foreground">Branch Details</p>
           </div>
         </div>
         
         <Card className="shadow-soft">
           <CardContent className="flex items-center justify-center h-64">
             <div className="text-center">
-              <p className="text-lg text-muted-foreground">No branch data available for this RO</p>
+              <p className="text-lg text-muted-foreground">No CSP data available for this branch</p>
               <Button 
-                onClick={() => navigate("/dashboard")} 
+                onClick={() => navigate(-1)} 
                 className="mt-4"
                 variant="outline"
               >
-                Return to Dashboard
+                Go Back
               </Button>
             </div>
           </CardContent>
@@ -99,13 +99,13 @@ const RODetails = () => {
           Back
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-foreground">{decodedROName}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{decodedBranchName}</h1>
           <p className="text-muted-foreground">
-            Regional Office - Branch wise transaction data
+            Branch Details - CSP wise transaction data
           </p>
         </div>
         <Badge variant="secondary">
-          {totalBranches} Branches
+          {totalCSPs} CSPs
         </Badge>
       </div>
 
@@ -131,31 +131,31 @@ const RODetails = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ROChart
-          data={branchData}
+          data={cspData.slice(0, 10)} // Show top 10 CSPs in chart
           type="bar"
-          title="Branch wise Total Transactions"
+          title="Top CSPs by Transaction Volume"
           dataKey="totalTxnCount"
-          nameKey="branchName"
+          nameKey="cspName"
         />
         <ROChart
-          data={branchData}
+          data={cspData.slice(0, 6)} // Show top 6 CSPs in pie chart
           type="pie"
-          title="Transaction Distribution"
+          title="CSP Transaction Distribution"
           dataKey="totalTxnCount"
-          nameKey="branchName"
+          nameKey="cspName"
         />
       </div>
 
-      {/* Branch Data Table */}
+      {/* CSP Data Table */}
       <DataTable
-        title={`${decodedROName} - Branch wise Transaction Data`}
-        data={branchData}
+        title={`${decodedBranchName} - CSP wise Transaction Data`}
+        data={cspData}
         columns={tableColumns}
-        onRowClick={handleBranchClick}
-        searchPlaceholder="Search by branch name..."
+        onRowClick={handleCSPClick}
+        searchPlaceholder="Search by CSP name or ID..."
       />
     </div>
   );
 };
 
-export default RODetails;
+export default BranchDetails;

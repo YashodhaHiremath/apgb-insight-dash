@@ -16,7 +16,7 @@ const NonFIStatus = () => {
 
   const months = ["April", "May", "June", "July"];
 
-  const handleMonthChange = (month: string, checked: boolean) => {
+  const handleMonthChange = (month, checked) => {
     if (checked) {
       setSelectedMonths([...selectedMonths, month]);
     } else {
@@ -74,7 +74,7 @@ const NonFIStatus = () => {
     { key: 'pmsby', label: 'PMSBY' }
   ];
 
-  const handleROClick = (row: any) => {
+  const handleROClick = (row) => {
     navigate(`/dashboard/non-fi/${encodeURIComponent(row.roName)}`);
   };
 
@@ -128,7 +128,7 @@ const NonFIStatus = () => {
                   id={month}
                   checked={selectedMonths.includes(month)}
                   onCheckedChange={(checked) => 
-                    handleMonthChange(month, checked as boolean)
+                    handleMonthChange(month, checked)
                   }
                 />
                 <Label htmlFor={month}>{month}</Label>

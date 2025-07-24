@@ -12,20 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Download, Printer, FileText, Eye } from "lucide-react";
 
-interface Column {
-  key: string;
-  label: string;
-  width?: string;
-}
-
-interface DataTableProps {
-  title: string;
-  data: any[];
-  columns: Column[];
-  onRowClick?: (row: any) => void;
-  showActions?: boolean;
-  searchPlaceholder?: string;
-}
 
 const DataTable = ({ 
   title, 
@@ -34,7 +20,7 @@ const DataTable = ({
   onRowClick, 
   showActions = true,
   searchPlaceholder = "Search..."
-}: DataTableProps) => {
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredData = data.filter((row) =>
@@ -43,7 +29,7 @@ const DataTable = ({
     )
   );
 
-  const handleExport = (type: 'excel' | 'pdf' | 'print') => {
+  const handleExport = (type) => {
     // Mock export functionality
     console.log(`Exporting as ${type}`);
   };

@@ -1,13 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface TransactionChartProps {
-  data: any[];
-  title: string;
-  description?: string;
-}
-
-const TransactionChart = ({ data, title, description }: TransactionChartProps) => {
+const TransactionChart = ({ data, title, description }) => {
   return (
     <Card className="shadow-soft">
       <CardHeader>

@@ -1,17 +1,10 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface ROChartProps {
-  data: any[];
-  type: 'pie' | 'bar';
-  title: string;
-  dataKey: string;
-  nameKey: string;
-}
 
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16'];
 
-const ROChart = ({ data, type, title, dataKey, nameKey }: ROChartProps) => {
+const ROChart = ({ data, type, title, dataKey, nameKey }) => {
   if (type === 'pie') {
     return (
       <Card className="shadow-soft">
